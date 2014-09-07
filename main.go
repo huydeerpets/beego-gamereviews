@@ -16,7 +16,7 @@ func init() {
 
 func initDb() {
 	orm.RegisterDriver("mysql", orm.DR_MySQL)
-	orm.RegisterDataBase("default", "mysql", "gamereviews:gamereviews@/gamereviews?charset=utf8")
+	orm.RegisterDataBase("default", "mysql", "gamereviews:gamereviews@tcp(127.0.0.1:3306)/gamereviews?charset=utf8")
 	orm.SetMaxIdleConns("default", 100)
 	orm.SetMaxOpenConns("default", 100)
 
