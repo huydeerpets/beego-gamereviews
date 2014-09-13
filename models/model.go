@@ -14,3 +14,7 @@ func (this *ModelManager) GetOrm() orm.Ormer {
 	}
 	return this.o
 }
+
+func (this *ModelManager) QueryTable(tableName string) orm.QuerySeter {
+	return this.GetOrm().QueryTable(tableName)
+}

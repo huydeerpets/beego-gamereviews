@@ -32,11 +32,14 @@ func init() {
 	orm.RegisterModelWithPrefix("t_", new(Game))
 }
 
-func (this *GameManager) All() []*Game {
-	o := this.GetOrm()
+func (this *GameManager) TableName() string {
+	const TABLE_NAME = "t_game"
+	return TABLE_NAME
+}
 
+func (this *GameManager) All() []*Game {
 	var games []*Game
-	_, err := o.QueryTable("t_game").All(&games)
+	_, err := this.QueryTable(this.TableName()).All(&games)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -45,9 +48,7 @@ func (this *GameManager) All() []*Game {
 }
 
 func (this *GameManager) Count() int64 {
-	o := this.GetOrm()
-
-	cnt, err := o.QueryTable("t_game").Count()
+	cnt, err := this.QueryTable(this.TableName()).Count()
 	if err != nil {
 		beego.Error(err)
 	}
@@ -56,10 +57,8 @@ func (this *GameManager) Count() int64 {
 }
 
 func (this *GameManager) Find(pagination *Pagination) []*Game {
-	o := this.GetOrm()
-
 	var games []*Game
-	_, err := o.QueryTable("t_game").Limit(pagination.Length).Offset((pagination.Page - 1) * pagination.Length).All(&games)
+	_, err := this.QueryTable(this.TableName()).Limit(pagination.Length).Offset((pagination.Page - 1) * pagination.Length).All(&games)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -68,23 +67,18 @@ func (this *GameManager) Find(pagination *Pagination) []*Game {
 }
 
 func (this *GameManager) Get(id int) *Game {
-	o := this.GetOrm()
-
 	game := Game{Id: id}
 
-	err := o.Read(&game)
+	err := this.GetOrm().Read(&game)
 	if err != nil {
 		beego.Error(err)
-		return nil
 	}
 
 	return &game
 }
 
 func (this *GameManager) Create(game *Game) *Game {
-	o := this.GetOrm()
-
-	_, err := o.Insert(game)
+	_, err := this.GetOrm().Insert(game)
 	if err != nil {
 		beego.Error(err)
 		return nil
@@ -94,9 +88,7 @@ func (this *GameManager) Create(game *Game) *Game {
 }
 
 func (this *GameManager) Update(game *Game) *Game {
-	o := this.GetOrm()
-
-	_, err := o.Update(game)
+	_, err := this.GetOrm().Update(game)
 	if err != nil {
 		beego.Error(err)
 		return nil

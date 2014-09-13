@@ -3,6 +3,7 @@ package modules
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
+	_ "github.com/astaxie/beego/cache/memcache"
 	"github.com/astaxie/beego/context"
 )
 
@@ -10,7 +11,8 @@ var AppCache cache.Cache
 
 func init() {
 	beego.Info("init cache.")
-	c, _ := cache.NewCache("memory", `{"CachePath":"./cache","FileSuffix":".cache","DirectoryLevel":2,"EmbedExpiry":120,"interval":60}`)
+	// c, _ := cache.NewCache("memory", `{"CachePath":"./cache","FileSuffix":".cache","DirectoryLevel":2,"EmbedExpiry":120,"interval":60}`)
+	c, _ := cache.NewCache("memcache", `{"conn":"127.0.0.1:11211"}`)
 	AppCache = c
 }
 

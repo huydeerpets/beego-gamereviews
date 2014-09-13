@@ -19,6 +19,7 @@ func initDb() {
 	orm.RegisterDataBase("default", "mysql", "gamereviews:gamereviews@tcp(127.0.0.1:3306)/gamereviews?charset=utf8")
 	orm.SetMaxIdleConns("default", 100)
 	orm.SetMaxOpenConns("default", 100)
+	orm.Debug = beego.RunMode == "dev"
 
 	err := orm.RunSyncdb("default", false, true)
 	if err != nil {
@@ -27,7 +28,7 @@ func initDb() {
 }
 
 func initTask() {
-	task := toolbox.NewTask("SearchITunes", "0/60 * * * * *", tasks.SearchITunes)
+	task := toolbox.NewTask("SearchITunes", "* 0/10 * * * *", tasks.SearchITunes)
 	toolbox.AddTask("SearchITunes", task)
 	toolbox.StartTask()
 }
