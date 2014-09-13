@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
 	_ "github.com/astaxie/beego/cache/memcache"
@@ -16,8 +17,21 @@ func init() {
 	AppCache = c
 }
 
-func JsonRequestCache(ctx *context.Context, key string) bool {
+func WriteJson(ctx *context.Context, bytes []byte) {
 	ctx.Output.Header("Content-Type", "application/json;charset=UTF-8")
+	ctx.Output.Body(bytes)
+}
+
+func WriteInterfaceJson(ctx *context.Context, key string, response interface{}) {
+	content, err := json.Marshal(&response)
+	if err != nil {
+		beego.Error(err)
+	}
+	AppCache.Put(key, string(content), 3600)
+	WriteJson(ctx, content)
+}
+
+func JsonRequestCache(ctx *context.Context, key string) bool {
 
 	cacheData := AppCache.Get(key)
 	if cacheData == nil {
@@ -25,7 +39,7 @@ func JsonRequestCache(ctx *context.Context, key string) bool {
 	}
 
 	var str string = cacheData.(string)
-	ctx.Output.Body([]byte(str))
+	WriteJson(ctx, []byte(str))
 
 	return true
 }

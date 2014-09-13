@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/macococo/beego-gamereviews/models"
 	"github.com/macococo/beego-gamereviews/modules"
@@ -12,18 +11,12 @@ type GameListController struct {
 }
 
 func (this *GameListController) Get() {
-	exist := modules.JsonRequestCache(this.Ctx, "game_list")
+	key := "game_list"
+	exist := modules.JsonRequestCache(this.Ctx, key)
 	if !exist {
 		gameManager := models.GameManager{}
 		games := gameManager.All()
 
-		content, err := json.Marshal(&games)
-		if err != nil {
-			beego.Error(err)
-		}
-
-		modules.AppCache.Put("game_list", string(content), 3600)
-
-		this.Ctx.Output.Body(content)
+		modules.WriteInterfaceJson(this.Ctx, key, &games)
 	}
 }

@@ -28,7 +28,7 @@ func initDb() {
 }
 
 func initTask() {
-	task := toolbox.NewTask("SearchITunes", "* 0/10 * * * *", tasks.SearchITunes)
+	task := toolbox.NewTask("SearchITunes", "* */10 * * * *", tasks.SearchITunes)
 	toolbox.AddTask("SearchITunes", task)
 	toolbox.StartTask()
 }

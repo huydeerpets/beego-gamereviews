@@ -1,0 +1,1 @@
+CREATE INDEX t_user_type_idx ON t_user (type);
