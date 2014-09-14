@@ -7,11 +7,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/macococo/beego-gamereviews/routers"
 	"github.com/macococo/beego-gamereviews/tasks"
+	"github.com/yvasiyarov/beego_gorelic"
 )
 
 func init() {
 	initDb()
 	initTask()
+	initNewRelic()
 }
 
 func initDb() {
@@ -31,6 +33,12 @@ func initTask() {
 	task := toolbox.NewTask("SearchITunes", "* */10 * * * *", tasks.SearchITunes)
 	toolbox.AddTask("SearchITunes", task)
 	toolbox.StartTask()
+}
+
+func initNewRelic() {
+	if beego.AppConfig.String("NewrelicLicense") != "" {
+		beego_gorelic.InitNewrelicAgent()
+	}
 }
 
 func main() {
