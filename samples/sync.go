@@ -1,1 +1,0 @@
-// http://mattn.kaoriya.net/software/lang/go/20140625223125.htm
